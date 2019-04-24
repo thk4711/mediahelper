@@ -1,0 +1,202 @@
+body {
+  background: black;
+  overflow: hidden;
+}
+
+.btn-default {
+    background-color: black;
+    color: white;
+    border-color: black;
+    border-radius: 0px;
+    font-size: 50px ! important;
+    font-family: icons;
+  }
+.btn-default:hover{
+    background-color: black;
+    color: white;
+    border-color: black;
+    border-radius: 1px;
+    font-size: 50px ! important;
+    font-family: icons;
+  }
+.btn-default:focus{
+    background-color: black;
+    color: white;
+    border-color: black;
+    border-radius: 0px;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 50px ! important;
+    font-family: icons;
+}
+  }
+.btn-default:active    {
+    background-color: black;
+    color: white;
+    border-color: black;
+    border-radius: 0px;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 50px ! important;
+    font-family: icons;
+}
+
+.btn-right {
+  position: absolute;
+  right: 10px;
+}
+
+.light {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 300;
+  color: #aaa;
+  white-space: wrap;
+  font-size: 20px;
+  line-height: 25px;
+}
+
+.regular {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 400;
+  color: #fff;
+  white-space: nowrap;
+  font-size: 20px;
+  line-height: 25px;
+}
+
+.light-big {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 300;
+  color: #aaa;
+  white-space: wrap;
+  font-size: 25px;
+  line-height: 30px;
+}
+
+.regular-big {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 400;
+  color: #fff;
+  white-space: nowrap;
+  font-size: 25px;
+  line-height: 30px;
+}
+
+@font-face {
+    font-family: "icons";
+    src: url("/fonts/Material-Design-Iconic-Font.ttf");
+    }
+@font-face {
+    font-family: "mediaicons";
+    src: url("/fonts/socialicious.ttf");
+    }
+
+@font-face {
+    font-family: "roboto";
+    src: url("/fonts/Roboto-Condensed-Regular.ttf");
+    }
+
+@font-face {
+  font-family: "Roboto Condensed";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Roboto Condensed"),
+  local("RobotoCondensed-Regular"),
+  url("/fonts/Roboto-Condensed-Regular.ttf") format("truetype");
+  }
+
+@font-face {
+  font-family: "Roboto Condensed";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Roboto Condensed Light"),
+  local("RobotoCondensed-Light"),
+  url("/fonts/Roboto-Condensed-Light.ttf") format("truetype");
+  }
+
+  .slider.slider-horizontal{
+    width:180px !important;
+    }
+  .slider-handle {
+     background: #F3A829 !important ;
+    }
+
+    .fadein {
+      opacity: 1;
+      transition: opacity .25s ease-in-out;
+      -moz-transition: opacity .25s ease-in-out;
+      -webkit-transition: opacity .25s ease-in-out;
+    }
+    .fadeout {
+      opacity: 0;
+      transition: opacity .25s ease-in-out;
+      -moz-transition: opacity .25s ease-in-out;
+      -webkit-transition: opacity .25s ease-in-out;
+    }
+
+    .fadeto {
+      opacity: 0.3;
+      transition: opacity .25s ease-in-out;
+      -moz-transition: opacity .25s ease-in-out;
+      -webkit-transition: opacity .25s ease-in-out;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch_slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0px;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .switch_slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .switch_slider {
+      background-color: #F3A829;
+    }
+
+    input:focus + .switch_slider {
+      box-shadow: 0 0 1px #F3A829;
+    }
+
+    input:checked + .switch_slider:before {
+      -webkit-transform: translateX(16px);
+      -ms-transform: translateX(16px);
+      transform: translateX(16px);
+    }
+
+    /* Rounded sliders */
+    .switch_slider.round {
+      border-radius: 34px;
+    }
+
+    .switch_slider.round:before {
+      border-radius: 50%;
+    }

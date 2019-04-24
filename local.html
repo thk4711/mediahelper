@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Audio Controls</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="AudioControls">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport" content = "width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <link rel="apple-touch-icon" href="touch-icon-iphone.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/touch-icon-ipad.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/touch-icon-iphone-retina.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/touch-icon-ipad-retina.png">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/media_helper.css">
+  <link rel="stylesheet" href="/css/bootstrap-slider.min.css">
+  <script src="/js/bootstrap-slider.min.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/bootstrap-slider.min.js"></script>
+  <script src="/js/media_helper.js"></script>
+  <script language="javascript" type="text/javascript" src="js/clock.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <div id="buttons"  class="btn-group btn-group-lg" role="group" aria-label="Source"></div>
+  <div id="speaker"  class="btn-right btn-group btn-group-lg" role="group" aria-label="Source">
+    <button id="headphone-on" class="btn btn-default" style="display:none;">
+      &#xF29D;
+    </button>
+    <button id="speaker-on" class="btn btn-default" style="display:block;">
+      &#xF2D5;
+    </button>
+  </div>
+</div>
+<div id="sliders" style="color: white;"></div>
+  <table style="margin-top: 0px; margin-bottom: 0px;">
+    <tr style="width: 700px; max-width: 700px; display: inline-block;">
+      <td style="padding-top:0px; padding-bottom:0px; height: 240px; max-height: 240px;">
+        <div style="display: flex; justify-content: flex-end; width: 230px; max-width: 230px;">
+          <div style="transform: scale(1.5);" id="playback-controls" class="btn-group btn-group-lg" role="group" aria-label="playback">
+            <button id="prev" type="button" class="btn btn-default">&#xF3B5;</button>
+            <button style="display:none;" id="play" type="button" class="btn btn-default">&#xF3AA;</button>
+            <button id="pause" type="button" class="btn btn-default">&#xF3A7;</button>
+            <button id="next" type="button" class="btn btn-default">&#xF3B4;</button>
+          </div>
+        </div>
+      </td>
+      <td rowspan="2">
+        <div style="height: 240px; max-height: 240px; padding-left:70px;">
+          <span id="coverdiv">
+            <img width="240" id="albumCover" src="" alt="Cover">
+          </span>
+          <div class="container">
+	           <div id="myclock"></div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div id="metadata" class="container">
+          <div id="track" class="regular-big"><span></span></div>
+          <div id="artist" class="light-big"><span></span></div>
+          <div id="album" class="light-big"><span></span></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

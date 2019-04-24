@@ -1,0 +1,15 @@
+[Unit]
+Description=Mediahelper
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/mediahelper/
+ExecStart=/opt/mediahelper/media_helper.py
+Restart=always
+RestartSec=10
+StartLimitInterval=30
+StartLimitBurst=20
+
+[Install]
+WantedBy=multi-user.target

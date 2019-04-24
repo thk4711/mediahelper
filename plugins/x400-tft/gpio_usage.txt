@@ -1,0 +1,47 @@
+ +-----+---------------+---Pi 3---+---------------+-----+
+ | BCM |   Usage       | Physical | Usage         | BCM |
+ +-----+---------------+----++----+---------------+-----+
+ |     |    3.3v       |  1 || 2  | 5v            |     |
+ |   2 | DISPLAY_SDA   |  3 || 4  | 5v            |     |
+ |   3 | DISPLAY_SCL   |  5 || 6  | 0v            |     |
+ |   4 | I2S_SWITCH_3  |  7 || 8  | UNUSED        | 14  |
+ |     |      0v       |  9 || 10 | UNUSED        | 15  |
+ |  17 | INFRARED      | 11 || 12 | I2S BCK       | 18  |
+ |  27 | GPIO. 2       | 13 || 14 | 0v            |     |
+ |  22 | GPIO. 3       | 15 || 16 | UNUSED        | 23  |
+ |     |    3.3v       | 17 || 18 | UNUSED        | 24  |
+ |  10 | I2S_SWITCH_2  | 19 || 20 | 0v            |     |
+ |   9 | UNUSED        | 21 || 22 | ENCODER_1_A   | 25  |
+ |  11 | UNUSED        | 23 || 24 | ENCODER_1_B   | 8   |
+ |     |      0v       | 25 || 26 | ENCODER_1_BTN | 7   |
+ |   0 |   SDA.0       | 27 || 28 | SCL.0         | 1   |
+ |   5 | UNUSED        | 29 || 30 | 0v            |     |
+ |   6 | UNUSED        | 31 || 32 | ENCODER_2_A   | 12  |
+ |  13 | I2S_SWITCH_1  | 33 || 34 | 0v            |     |
+ |  19 | I2s LRCK      | 35 || 36 | ENCODER_2_B   | 16  |
+ |  26 | UNUSED        | 37 || 38 | ENCODER_2_BTN | 20  |
+ |     |      0v       | 39 || 40 | I2S DATA      | 21  |
+ +-----+---------------+----++----+---------------+-----+
+ | BCM |   Usage       | Physical | Usage         | BCM |
+ +-----+---------------+---Pi 3---+---------------+-----+
+
+
+ IRLML2244
+
+            +UB------+-------+
+                     |       |
+                     R2      |
+                     |       S
+                     +------G  T2
+                     |       D
+                     C       |
+ ucPin----R1-------B   T1   LAST
+                     E       |
+                     |       GND
+                    GND
+
+ T1= BC547
+ T2 = MOSFET
+
+ +UB Versorgungsspannung, darf maximal die Gate/Sourcespannung von haben,
+ also ca. 12V.
