@@ -1,0 +1,4 @@
+SPOTIPY_CLIENT_ID     = please fill in
+SPOTIPY_CLIENT_SECRET = please fill in
+SPOTIPY_REDIRECT_URI  = https://google.com/
+spotify_username      = please fill in
