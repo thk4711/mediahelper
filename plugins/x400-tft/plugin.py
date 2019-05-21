@@ -27,6 +27,7 @@ flag            = False
 remote_change   = False
 display_enabled = True
 speaker_enabled = True
+hw_test         = False
 active_output   = 'speaker'
 
 volume          = 0
@@ -41,7 +42,7 @@ conf            = {}
 #------------------------------------------------------------------------------#
 #        report properies                                                      #
 #------------------------------------------------------------------------------#
-def init(path, p = '8081', se=''):
+def init(path, p = '8081', se='', test=False):
     global modes
     global conf
     global mixer
@@ -51,6 +52,8 @@ def init(path, p = '8081', se=''):
     global port
     global services_string
     global services
+    global hw_test
+    hw_test = test
     conf = read_config(path + '/plugin.conf')
     host = conf['MISC']['HOST']
     devices = [InputDevice(path) for path in list_devices()]
@@ -77,10 +80,11 @@ def init(path, p = '8081', se=''):
     GPIO.output(conf['OUT_PINS']['DISPLAY_ENABLE'], display_enabled)
     GPIO.output(conf['OUT_PINS']['SPEAKER_ENABLE'], speaker_enabled)
     switch_output(active_output)
-    time.sleep(2)
-    change_monitor()
     ir_monitor()
-    x_windows()
+    if not hw_test:
+        time.sleep(2)
+        change_monitor()
+        x_windows()
 
 #------------------------------------------------------------------------------#
 #           read config file                                                   #
@@ -339,6 +343,8 @@ def read_encoder(pin):
             volume = 100
         if volume < 0:
             volume = 0
+        if hw_test:
+            print('volume:',volume)
 
 #------------------------------------------------------------------------------#
 #           monitor changes and update display                                           #
@@ -399,6 +405,9 @@ def toggle_back_light():
 #             translate key code to string                        #
 #-----------------------------------------------------------------#
 def key_code_to_action(code):
+    if hw_test:
+        print('received IR code:', code)
+        return()
     global volume
     if code == 103:
         volume = volume + 1
