@@ -1,6 +1,5 @@
 #!/usr/bin/python3.5
 
-import pprint
 import urllib
 import requests
 import time
@@ -14,22 +13,19 @@ import subprocess
 import smbus
 
 bus             = smbus.SMBus(1)
-i2c_address     = 0x05
-
 ENCODER_1_LAST  = (0,1,1)
-
 lirc_device     = None
 mixer           = None
 port            = None
 module_path     = None
 out_device      = None
+i2c_address     = 0x05
 flag            = False
 remote_change   = False
 display_enabled = True
 speaker_enabled = True
 hw_test         = False
 active_output   = 'speaker'
-
 volume          = 0
 host            = ''
 current_mode    = ''
@@ -53,9 +49,11 @@ def init(path, p = '8081', se='', test=False):
     global services_string
     global services
     global hw_test
+    #global i2c_address
     hw_test = test
     conf = read_config(path + '/plugin.conf')
     host = conf['MISC']['HOST']
+    #i2c_address = conf['MISC']['I2C_ADDRESS']
     devices = [InputDevice(path) for path in list_devices()]
     for device in devices:
         if device.name == 'lircd-uinput':
@@ -77,7 +75,6 @@ def init(path, p = '8081', se='', test=False):
     GPIO.add_event_detect(conf['IN_PINS']['ENCODER_1_PIN_A'], GPIO.RISING, callback=read_encoder)
     GPIO.add_event_detect(conf['IN_PINS']['ENCODER_1_PIN_B'], GPIO.RISING, callback=read_encoder)
     GPIO.add_event_detect(conf['IN_PINS']['I2C_INTERRUPT'], GPIO.RISING, callback=get_i2c_data)
-    GPIO.output(conf['OUT_PINS']['DISPLAY_ENABLE'], display_enabled)
     GPIO.output(conf['OUT_PINS']['SPEAKER_ENABLE'], speaker_enabled)
     switch_output(active_output)
     ir_monitor()
@@ -181,18 +178,21 @@ def playmode(play_mode):
 #           mute or unmute speakers                                            #
 #------------------------------------------------------------------------------#
 def switch_output(output):
+    bus.write_byte(i2c_address, 7)
     if output == 'speaker':
-        print('switching to speakers')
+        debug('switching to speakers')
         GPIO.output(conf['OUT_PINS']['SPEAKER_ENABLE'], True)
         GPIO.output(conf['OUT_PINS']['HEADPHONE_ENABLE'], False)
     elif output == 'headphone':
-        print('switching to headphone')
+        debug('switching to headphone')
         GPIO.output(conf['OUT_PINS']['SPEAKER_ENABLE'], False)
         GPIO.output(conf['OUT_PINS']['HEADPHONE_ENABLE'], True)
     elif output == 'mute':
-        print('muting')
+        debug('muting')
         GPIO.output(conf['OUT_PINS']['SPEAKER_ENABLE'], False)
         GPIO.output(conf['OUT_PINS']['HEADPHONE_ENABLE'], False)
+    time.sleep(1)
+    bus.write_byte(i2c_address, 8)
 
 #------------------------------------------------------------------------------#
 #           perform get request                                                #
@@ -220,6 +220,13 @@ def handle_button(pin):
             toggle_back_light()
 
 #------------------------------------------------------------------------------#
+#           print debug message if debug is enabled                            #
+#------------------------------------------------------------------------------#
+def debug(message):
+    if debug:
+        print('debug:', message)
+
+#------------------------------------------------------------------------------#
 #           handle button press                                                #
 #------------------------------------------------------------------------------#
 def press_usb_key(key):
@@ -237,8 +244,8 @@ def press_usb_key(key):
 #------------------------------------------------------------------------------#
 def get_i2c_data(pin):
     global volume
+    print('something')
     code = bus.read_byte(i2c_address)
-    #print('I2C: ', code)
     if code == 20:
         volume = volume + 1
         if volume > 100:
@@ -262,17 +269,10 @@ def get_i2c_data(pin):
         command_queue.append('toggle')
         time.sleep(0.1)
     elif code == 1:
-        GPIO.output(conf['OUT_PINS']['DISPLAY_ENABLE'], 1)
         switch_output(active_output)
     elif code == 2:
-        GPIO.output(conf['OUT_PINS']['DISPLAY_ENABLE'], 0)
         display_enabled = False
-        switch_output('mute')
-        return_code = subprocess.call("/sbin/poweroff", shell=True)
-    elif code == 3:
-        return
-        GPIO.output(conf['OUT_PINS']['DISPLAY_ENABLE'], 0)
-        display_enabled = False
+        bus.write_byte(i2c_address, 5)
         switch_output('mute')
         return_code = subprocess.call("/sbin/poweroff", shell=True)
 
@@ -305,7 +305,6 @@ def set_switches(mode):
         if item == mode:
             for io in conf['SWITCHES'][item]:
                 GPIO.output(conf['OUT_PINS'][io], conf['SWITCHES'][item][io])
-                #print('setting',conf['OUT_PINS'][io],'to',conf['SWITCHES'][item][io])
             time.sleep(1)
             try:
                 out_device = alsaaudio.PCM(alsaaudio.PCM_PLAYBACK, device='hw:1,0')
@@ -318,7 +317,6 @@ def set_switches(mode):
         except:
             print('failed to close audio device')
         GPIO.output(conf['OUT_PINS'][io], conf['SWITCHES']['default'][io])
-        #print('setting',conf['OUT_PINS'][io],'to',conf['SWITCHES'][item][io])
 
 #------------------------------------------------------------------------------#
 #           handle encoder change                                              #
@@ -334,9 +332,9 @@ def read_encoder(pin):
             item = (pin, 1, GPIO.input(conf['IN_PINS']['ENCODER_1_PIN_B']))
         else:
             item = (pin, GPIO.input(conf['IN_PINS']['ENCODER_1_PIN_A']),1)
-        if item == (conf['IN_PINS']['ENCODER_1_PIN_A'],1,1) and ENCODER_1_LAST[1] == 0:	# Is it in END position?
+        if item == (conf['IN_PINS']['ENCODER_1_PIN_A'],1,1) and ENCODER_1_LAST[1] == 0:
             volume = volume - 1
-        elif item == (conf['IN_PINS']['ENCODER_1_PIN_B'],1,1) and ENCODER_1_LAST[2] == 0:	# Same but for ENC_B
+        elif item == (conf['IN_PINS']['ENCODER_1_PIN_B'],1,1) and ENCODER_1_LAST[2] == 0:
             volume = volume + 1
         ENCODER_1_LAST = item
         if volume > 100:
@@ -393,11 +391,9 @@ def change_monitor():
 def toggle_back_light():
     global display_enabled
     if display_enabled:
-        GPIO.output(conf['OUT_PINS']['DISPLAY_ENABLE'], 0)
         display_enabled = False
         bus.write_byte(i2c_address, 5)
     else:
-        GPIO.output(conf['OUT_PINS']['DISPLAY_ENABLE'], 1)
         display_enabled = True
         bus.write_byte(i2c_address, 6)
 
